@@ -1,5 +1,6 @@
 import usb.core
 import usb.util
+import time
 
 from keyboard_alike import mapping
 
@@ -33,8 +34,8 @@ class Reader(object):
         self._device = None
         self._endpoint = None
 
-    def initialize(self):
-        self._device = usb.core.find(idVendor=self.vendor_id, idProduct=self.product_id)
+    def initialize(self, inputDevice):
+        self._device = inputDevice
 
         if self._device is None:
             raise DeviceException('No device found, check vendor_id and product_id')
@@ -57,6 +58,19 @@ class Reader(object):
     def read(self):
         data = []
         data_read = False
+        
+        # while True:
+        #     try:
+        #         data += self._endpoint.read(self._endpoint.wMaxPacketSize)
+        #         data_read = True
+        #     except usb.core.USBError as e:
+        #         if e.args[0] == 110 and data_read:
+        #             if len(data) < self.data_size:
+        #                 raise ReadException('Got %s bytes instead of %s - %s' % (len(data), self.data_size, str(data)))
+        #             else:
+        #                 break
+        #t = time.time();
+        #time.time()-t<1
 
         while True:
             try:
@@ -65,6 +79,7 @@ class Reader(object):
             except usb.core.USBError as e:
                 if e.args[0] == 110 and data_read:
                     if len(data) < self.data_size:
+                        break
                         raise ReadException('Got %s bytes instead of %s - %s' % (len(data), self.data_size, str(data)))
                     else:
                         break
