@@ -71,8 +71,8 @@ class Reader(object):
         #                 break
         #t = time.time();
         #time.time()-t<1
-
-        while True:
+	t_end = time.time() + 5
+        while time.time()<t_end:
             try:
                 data += self._endpoint.read(self._endpoint.wMaxPacketSize)
                 data_read = True
