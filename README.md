@@ -8,9 +8,11 @@ Welcome to Mice-Detector. The goal of this project is to allow mice to enter and
 
 Hardware: 2 arduino unos, 2 Tower Pro SG-5010 servos, 2 ONETAK 125kHZ RFid Readers, linux machine
 
-Libraries: pyUSB, pyTransitions, keyboard_alike
+Libraries: pyUSB, pyTransitions, keyboard_alike, machine can run python 2.7/3.0
 
 ### Installing
+
+To install simply clone/downloads the repository.
 
 Instructions for installing the libraries can be found in the links.
 
@@ -22,4 +24,10 @@ pyTransitions: https://github.com/pytransitions/transitions#installation
 
 Arduino: https://playground.arduino.cc/Linux/Ubuntu
 
+### Running the tests
 
+Open the terminal and cd to folder with all the files.
+
+```terminal
+sudo python MiceDetector.py
+```
