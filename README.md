@@ -1,9 +1,12 @@
 # RFidReaderCalTech
 
 # Table of Contents
-1. [Prerequisites](#prerequisites)
-2. [Example2](#example2)
-3. [Third Example](#third-example)
+1. [Getting Started](#getting-started)
+2. [Prerequisites](#prerequisites)
+3. [Installing](#installing)
+4. [Connecting Python to Arduino](#connecting-python-to-arduino)
+5. [Connecting arduino to python](#connecting-python-to-arduino)
+
 
 ## Getting Started
 
@@ -47,10 +50,21 @@ Create servo object
 Servo myservo;
 ```
 
-In the setup loop, set the buad to 96000 and connect the servo to the port.
+In setup, set the buad to 96000 and connect the servo to the port.
 ```arduino
 Serial.begin(9600); 
 myservo.attach(9);
+```
+In loop we're checking to see if something came across serial. Then we parse it into an int and use that value to write to our servo.
+```arduino
+if (Serial.available() > 0) {   // something came across serial
+            int integerValue = Serial.parseInt();
+            if (integerValue != 0)
+              {
+              Serial.println(integerValue);
+              myservo.write(integerValue);
+              }
+        }
 ```
 
 ### Connecting RFid sensors with Python
