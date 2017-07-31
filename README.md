@@ -48,7 +48,7 @@ arduino2 = serial.Serial('/dev/ttyACM0', 9600)
 ```
 
 ### Connecting Arduino to Python
-
+*All of this is taking place in the arduino IDE*
 Create servo object
 ```arduino
 Servo myservo;
