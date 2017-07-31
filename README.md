@@ -80,8 +80,14 @@ reader2 = reader.Reader(0x16c0, 0x27db, 36, 3, should_reset=False)
 
 In the Mice Class there are 4 main attributes: code, isAllowed, States, and Transitions.
 
-#### Code
-fdsfsd
+The code in Mice Class is an int value which we will use to compare to the RFid key.
+
+isAllowed is a boolean value used to determine if the mice is allowed to enter the tube.
+
+states is an array holding the state names we will use.
+```python
+states=['left', 'centerOut', 'right', 'centerIn']
+```
 
 ### Running the main file: MiceDetector.py
 
