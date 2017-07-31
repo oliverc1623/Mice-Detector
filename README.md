@@ -84,9 +84,18 @@ The code in Mice Class is an int value which we will use to compare to the RFid 
 
 isAllowed is a boolean value used to determine if the mice is allowed to enter the tube.
 
-states is an array holding the state names we will use.
+States is an array holding the state names we will use.
 ```python
 states=['left', 'centerOut', 'right', 'centerIn']
+```
+transitions is an array holding arrays containing the tigger, source, and destination.
+```python
+transitions = [
+        {'trigger': 'leftToCenter', 'source': 'left', 'dest': 'center'},
+        {'trigger': 'centerToRight', 'source': 'center', 'dest': 'right'},
+        {'trigger': 'rightToCenter', 'source': 'right', 'dest': 'center'},
+        {'trigger': 'centerToLeft', 'source': 'center', 'dest': 'left'}
+]
 ```
 
 ### Running the main file: MiceDetector.py
