@@ -1,15 +1,3 @@
-
-# coding: utf-8
-
-# ## THis is a notebook for troubleshooting things
-# 
-# 1. Will connect to arduino
-# 2. Move the servo motor
-# 3. Check if RFid works......
-# 4. Write to the arduino
-
-# In[1]:
-
 # Define all of my import....
 import serial
 import time
@@ -21,9 +9,6 @@ from transitions import Machine
 import timeit
 from threading import Timer
 import time
-
-
-# In[2]:
 
 #initialize arduino object
 arduino1 = serial.Serial('/dev/ttyACM1', 9600)
@@ -48,13 +33,10 @@ code4 = ''
 #initialize boolean variable to determine which stage a mice is in
 miceOneIsEntering = True
 
-
-# In[3]:
-
 class Mice:
     '''Mice class; this class will keep track of which mice is at each stage'''         
     # The states
-    states=['left', 'centerOut', 'right', 'centerIn']
+        states=['left', 'centerOut', 'right', 'centerIn']
 
     # The transitions
     transitions = [
@@ -87,14 +69,11 @@ miceID[0] = Mice(6164996, True)
 miceID[1] = Mice(8657565, True)
 miceID[2] = Mice(12919161, True)
 
-
-# In[4]:
-
 def readReader1():
     reader1.initialize(device[0])
     global code1
     code1 = reader1.read()
-    if code1 != '':
+    if code1 != '': 
         code1 = int(code1)
     reader1.disconnect()
     return code1
@@ -118,32 +97,25 @@ def gate2():
     time.sleep(2)
     arduino2.write(str(closeGate))
 
-
-# In[1]:
-
 # Variable globalState
 # Which is 1, 2, 3, or 4 depending on which state you are in
 globalState = 1
 
 while 1:
     if globalState == 1:
-        # Listening to RFid 1
-        #if MouseAllowed
-            # do something, 
-            # Open gate
-            # Close Gate
-            # Switch to globalState = 2
-        #else: # Mouse is not allowed...
-        #    continue
+        '''
+        Once we check globalState and pass, we enter another while True loop.
+        '''
         while True: 
-            readReader1() #readReader1() is in a while loop because RF id sensors have a 5 second window to detect keys
-            if code1 != '': # Break out once we have read a key
-                break
+            #readReader1() is in a while loop because RF id sensors have a 5 second window to detect keys
+            readReader1() 
+            if code1 != '': #At the end of that 5 second window we check to see of code1 is asinged a value.
+                break # break out of the infinite loop once we have a code. 
                 
-        for i in miceID:
-            if code1 == i.code and i.isAllowed == True:
+        for i in miceID: # Then we loop through all the mice in array miceID
+            if code1 == i.code and i.isAllowed == True: # We check which mouse matches the code we recieve and check if it is allowed
                 gate1() # Open Gate
-                globalState = 2
+                globalState = 2 # Chance globalState to 2
 
     elif globalState == 2:
         # Listen to RFid 2
@@ -151,48 +123,45 @@ while 1:
         # If RFid matches on RFid 2 of mouse in RFid state 1
         # Open gate. and proceed to globalState = 3
         repeat = 12
-        while repeat > 0:
-            readReader2()
+        while repeat > 0: # While 60 seconds
+            readReader2() # listen to RFid 2
             if code2 != '':
-                break
+                break # break once we recieved a code
             repeat = repeat - 1
 
-        if code2 == '':
+        if code2 == '': # check if mice is in center tube
             print 'No mice in the center returning to state 1'
-            globalState = 1
-        elif code1 == code2:
-                gate2()
-                globalState = 3
-                print globalState
+            globalState = 1 # set globalState to 1
+        elif code1 == code2: # if we did recieve a code
+                gate2() # open gate 2
+                globalState = 3 # set globalState to 3
         
     elif globalState == 3:
-        print 'We made it to state 3'
         # Stay i global State = 3
         # Until you receive signal from behavior box that session is terminated.....
         # For troubleshooting puproses, just assume you stay in here for < 900s
         #time.sleep(5)
-        while True:
+        while True: # listen to RFid reader 2 for an infinite amount of time...
             code3 = readReader2()
-            if code3 != '':
+            if code3 != '': # ... until we recieve the code and break
                 break
-        gate2()
-        globalState = 4
+        gate2() # open gate 2
+        globalState = 4 # set globalState to 4
         
         pass
     elif globalState == 4:
         # If RFid 1 matches the mouse that is returning, then open the gate.....
-        if code3 == code1:
+        if code3 == code1: # checking if the same mouse is returning
             while True:
-                code4 = readReader1()
+                code4 = readReader1() 
                 if code4 != '':
-                    break
+                    break # breaking once we recieved a code from RFid reader 1
             
-            for i in range(len(miceID)):
-                if code4 == miceID[i].code:
-                    miceID[i] = Mice(code4, False)
-                    gate1()
-                    globalState = 1
+            for i in range(len(miceID)): # looping through all mice in miceID array
+                if code4 == miceID[i].code: # checking which mice has the same code
+                    miceID[i] = Mice(code4, False) # set the isAllowed attribute to False
+                    gate1() 
+                    globalState = 1 # set globalState = 1 to repeat loop with another mouse.
         
     else:
             print 'something is wrong...'
-
