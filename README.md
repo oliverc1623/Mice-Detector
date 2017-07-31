@@ -97,6 +97,15 @@ transitions = [
         {'trigger': 'centerToLeft', 'source': 'center', 'dest': 'left'}
 ]
 ```
+### Instantiating the Mice
+To instantiate the Mice modify this chunk of code
+```python
+#instantiate mice
+miceID = [None] * 3
+miceID[0] = Mice(6164996, True)
+miceID[1] = Mice(8657565, True)
+miceID[2] = Mice(12919161, True)
+```
 
 ### Running the main file: MiceDetector.py
 
