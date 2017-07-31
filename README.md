@@ -1,4 +1,4 @@
-# RFidReaderCalTech
+# Mice Detector
 
 # Table of Contents
 1. [Getting Started](#getting-started)
@@ -86,11 +86,11 @@ The code in Mice Class is an int value which we will use to compare to the RFid 
 
 isAllowed is a boolean value used to determine if the mice is allowed to enter the tube.
 
-States is an array holding the state names we will use.
+States is an array holding the state names we will use (PyTransitions might be obsolete).
 ```python
 states=['left', 'centerOut', 'right', 'centerIn']
 ```
-transitions is an array holding arrays containing the tigger, source, and destination.
+transitions is an array holding arrays containing the tigger, source, and destination (PyTransitions might be obsolete).
 ```python
 transitions = [
         {'trigger': 'leftToCenter', 'source': 'left', 'dest': 'center'},
@@ -107,6 +107,26 @@ miceID = [None] * 3
 miceID[0] = Mice(6164996, True)
 miceID[1] = Mice(8657565, True)
 miceID[2] = Mice(12919161, True)
+```
+
+### Defining functions
+The function readReader1() is used to interpret the data from the RFid Key. It stores and returns the key into an str value called code1. readReader2() is synonomous except we're using the second RFis reader plug into the machine and storing and saving the key value into code2.
+```python
+def readReader1():
+    reader1.initialize(device[0])
+    global code1
+    code1 = reader1.read()
+    if code1 != '': 
+        code1 = int(code1)
+    reader1.disconnect()
+    return code1
+```
+The function gate1() writes to the arduino telling it to turn the servo to 160 degrees - rest 2 seconds - and turn the servo to 70 degrees. gate2() is essentially the same except we are writing to arduino2.
+```python
+def gate1():
+    arduino1.write(str(openGate))
+    time.sleep(2)
+    arduino1.write(str(closeGate))
 ```
 
 ### Running the main file: MiceDetector.py
