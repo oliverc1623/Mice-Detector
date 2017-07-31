@@ -1,7 +1,7 @@
 # Mice Detector
 
 # Table of Contents
-1. [Getting Started](#getting-started)
+1. [Description](#description)
 2. [Prerequisites](#prerequisites)
 3. [Installing](#installing)
 4. [Connecting Python to Arduino](#connecting-python-to-arduino)
@@ -10,9 +10,9 @@
 7. [Instantiating the Mice](#instantiating-the-mice)
 
 
-## Getting Started
+## Description
 
-Welcome to Mice-Detector. The goal of this project is to allow mice to enter and exit testing chambers without human help. The mice will travel through a tube with 2 RFid sensors on each end. The mice will also have a RFid chip implemented in their head so they can be read. 
+Welcome to Mice-Detector. The goal of this project is to allow mice to enter and exit testing chambers without human help. The mice will travel through a tube with 2 RFid sensors on each end. The mice will also have a RFid chip implemented in their head so they can be read. In this README is will outline and explain major chunks of code in the main script. 
 
 
 ### Prerequisites
@@ -129,7 +129,12 @@ def gate1():
     arduino1.write(str(closeGate))
 ```
 
-### Running the main file: MiceDetector.py
+### The main loop
+The main loop in the program is an infinite while loop. In our case we have 4 states we will be transitioning to and from. The variable globalState is used to asign and determine which state we're in.
+
+Inside the ```python while:1``` loop
+
+### Usage
 
 Open the terminal and cd to folder with all the files.
 
