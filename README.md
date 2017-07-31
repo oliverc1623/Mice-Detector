@@ -76,6 +76,13 @@ reader1 = reader.Reader(0x16c0, 0x27db, 36, 3, should_reset=False)
 reader2 = reader.Reader(0x16c0, 0x27db, 36, 3, should_reset=False)
 ```
 
+### Mice Class
+
+In the Mice Class there are 4 main attributes: code, isAllowed, States, and Transitions.
+
+#### Code
+fdsfsd
+
 ### Running the main file: MiceDetector.py
 
 Open the terminal and cd to folder with all the files.
