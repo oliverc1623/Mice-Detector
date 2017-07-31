@@ -6,6 +6,8 @@
 3. [Installing](#installing)
 4. [Connecting Python to Arduino](#connecting-python-to-arduino)
 5. [Connecting arduino to python](#connecting-python-to-arduino)
+6. [Mice Class](#mice-class)
+7. [Instantiating the Mice](#instantiating-the-mice)
 
 
 ## Getting Started
