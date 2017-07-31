@@ -15,7 +15,7 @@ Welcome to Mice-Detector. The goal of this project is to allow mice to enter and
 
 ### Prerequisites
 
-Hardware: 2 arduino unos, 2 Tower Pro SG-5010 servos, 2 ONETAK 125kHZ RFid Readers, linux machine
+Hardware: 2 arduino unos, 2 Tower Pro SG-5010 servos, 2 ONETAK 125kHZ RFid Readers, linux machine, PVC pipe
 
 Libraries: pyUSB, pyTransitions, keyboard_alike, machine can run python 2.7/3.0
 
