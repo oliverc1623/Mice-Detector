@@ -8,7 +8,9 @@
 5. [Connecting arduino to python](#connecting-python-to-arduino)
 6. [Mice Class](#mice-class)
 7. [Instantiating the Mice](#instantiating-the-mice)
-
+8. [Defining functions](#defining-functions)
+9. [The main loop](#the-main-loop)
+10. [Usage](#usage)
 
 ## Description
 
@@ -131,8 +133,6 @@ def gate1():
 
 ### The main loop
 The main loop in the program is an infinite while loop. In our case we have 4 states we will be transitioning to and from. The variable globalState is used to asign and determine which state we're in.
-
-Inside the ```python while:1``` loop
 
 ### Usage
 
