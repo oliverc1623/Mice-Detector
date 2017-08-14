@@ -1,0 +1,13 @@
+read key: 6164996 .... 2017-08-14 13:45:28.169845
+Mouse is allowed to enter; open gate 1; state = 22017-08-14 13:45:30.172268
+reader 2 is listening to RFid key 2017-08-14 13:45:32.425782
+break out of 60 second listening window 2017-08-14 13:45:32.425831
+open gate 2; set sate to 2017-08-14 13:45:34.430623
+reader 2 just listened to key 2017-08-14 13:45:37.441751
+open gate 2; set sate to 4 2017-08-14 13:45:39.444125
+reader 1 just listened to returning mouse 2017-08-14 13:45:43.471926
+checking which mice has the same code 2017-08-14 13:45:43.472006
+set the isAllowed attribute to False 2017-08-14 13:45:43.472863
+open gate 1 and set state to 1; repeat process with new mouse 2017-08-14 13:45:45.475184
+read key: 12919161 .... 2017-08-14 13:45:51.541868
+Mouse is allowed to enter; open gate 1; state = 22017-08-14 13:45:53.544723

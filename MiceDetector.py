@@ -4,17 +4,16 @@ import time
 from keyboard_alike import reader
 import usb.core
 import usb.util
-from multiprocessing import Process
 from transitions import Machine
 import timeit
 from threading import Timer
-import time
+import datetime
+
+path = 'log.txt'
 
 #initialize arduino object
 arduino1 = serial.Serial('/dev/ttyACM1', 9600)
 arduino2 = serial.Serial('/dev/ttyACM0', 9600)
-
-#initialize RFidReader1
 
 #initialize list of RFidReaders connected to computer
 device = list(usb.core.find(find_all=True, idVendor=0x16c0, idProduct = 0x27db))
@@ -36,7 +35,7 @@ miceOneIsEntering = True
 class Mice:
     '''Mice class; this class will keep track of which mice is at each stage'''         
     # The states
-        states=['left', 'centerOut', 'right', 'centerIn']
+    states=['left', 'centerOut', 'right', 'centerIn']
 
     # The transitions
     transitions = [
@@ -48,21 +47,14 @@ class Mice:
     
     def __init__(self, code, isAllowed):
         self.code = code
-        
         self.isAllowed = isAllowed
-        
         self.machine = Machine(model=self, states=Mice.states, initial='left')
-        
         self.machine.add_transition(trigger = 'leftToCenter', source='left', dest = 'centerOut')
-        
-        self.machine.add_transition(trigger = 'centerToRight', source='centerOUt', dest = 'right')
-        
-        self.machine.add_transition(trigger = 'rightToCenter', source='right', dest = 'centerIn')
-        
+        self.machine.add_transition(trigger = 'centerToRight', source='centerOUt', dest = 'right')        
+        self.machine.add_transition(trigger = 'rightToCenter', source='right', dest = 'centerIn')        
         self.machine.add_transition(trigger = 'centerToLeft', source='centerIn', dest = 'left')
-        
         self.machine.add_ordered_transitions(['left', 'centerOut', 'right', 'centerIn'])
-        
+
 #instantiate mice
 miceID = [None] * 3
 miceID[0] = Mice(6164996, True)
@@ -97,24 +89,24 @@ def gate2():
     time.sleep(2)
     arduino2.write(str(closeGate))
 
+file = open(path, 'w')
 # Variable globalState
 # Which is 1, 2, 3, or 4 depending on which state you are in
 globalState = 1
-
 while 1:
     if globalState == 1:
-        '''
-        Once we check globalState and pass, we enter another while True loop.
-        '''
+        #Once we check globalState and pass, we enter another while True loop.
         while True: 
             #readReader1() is in a while loop because RF id sensors have a 5 second window to detect keys
-            readReader1() 
+            readReader1()
             if code1 != '': #At the end of that 5 second window we check to see of code1 is asinged a value.
-                break # break out of the infinite loop once we have a code. 
+                file.write('* read key: ' + str(code1) + ' .... ' + str(datetime.datetime.now()) + '\n')
+                break # break out of the infinite loop once we have a code.
                 
         for i in miceID: # Then we loop through all the mice in array miceID
             if code1 == i.code and i.isAllowed == True: # We check which mouse matches the code we recieve and check if it is allowed
-                gate1() # Open Gate
+                gate1()# Open Gate
+                file.write('* Mouse is allowed to enter; open gate 1; state = 2 ' + str(datetime.datetime.now())+ '\n')
                 globalState = 2 # Chance globalState to 2
 
     elif globalState == 2:
@@ -125,15 +117,18 @@ while 1:
         repeat = 12
         while repeat > 0: # While 60 seconds
             readReader2() # listen to RFid 2
+            file.write('* reader 2 is listening to RFid key ' + str(datetime.datetime.now())+ '\n')
             if code2 != '':
+                file.write('* break out of 60 second listening window ' + str(datetime.datetime.now())+ '\n')
                 break # break once we recieved a code
             repeat = repeat - 1
 
         if code2 == '': # check if mice is in center tube
-            print 'No mice in the center returning to state 1'
+            file.write('* No mice is tube, set state to 1 ' + str(datetime.datetime.now())+ '\n')
             globalState = 1 # set globalState to 1
         elif code1 == code2: # if we did recieve a code
                 gate2() # open gate 2
+                file.write('* open gate 2; set sate to ' + str(datetime.datetime.now())+ '\n')
                 globalState = 3 # set globalState to 3
         
     elif globalState == 3:
@@ -143,9 +138,11 @@ while 1:
         #time.sleep(5)
         while True: # listen to RFid reader 2 for an infinite amount of time...
             code3 = readReader2()
+            file.write('* reader 2 just listened to key ' + str(datetime.datetime.now())+ '\n')
             if code3 != '': # ... until we recieve the code and break
                 break
         gate2() # open gate 2
+        file.write('* open gate 2; set sate to 4 ' + str(datetime.datetime.now())+ '\n')
         globalState = 4 # set globalState to 4
         
         pass
@@ -154,14 +151,18 @@ while 1:
         if code3 == code1: # checking if the same mouse is returning
             while True:
                 code4 = readReader1() 
+                file.write('* reader 1 just listened to returning mouse ' + str(datetime.datetime.now())+ '\n')
                 if code4 != '':
                     break # breaking once we recieved a code from RFid reader 1
             
             for i in range(len(miceID)): # looping through all mice in miceID array
                 if code4 == miceID[i].code: # checking which mice has the same code
+                    file.write('* checking which mice has the same code ' + str(datetime.datetime.now())+ '\n')
                     miceID[i] = Mice(code4, False) # set the isAllowed attribute to False
+                    file.write('* set the isAllowed attribute to False ' + str(datetime.datetime.now())+ '\n')
                     gate1() 
+                    file.write('* open gate 1 and set state to 1; repeat process with new mouse ' + str(datetime.datetime.now())+ '\n')
                     globalState = 1 # set globalState = 1 to repeat loop with another mouse.
-        
     else:
             print 'something is wrong...'
+            file.write('* Something is wrong ' + str(datetime.datetime.now())+ '\n')

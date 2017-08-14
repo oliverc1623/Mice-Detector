@@ -71,7 +71,8 @@ class Reader(object):
         #                 break
         #t = time.time();
         #time.time()-t<1
-	t_end = time.time() + 5
+	
+        t_end = time.time() + 5
         while time.time()<t_end:
             try:
                 data += self._endpoint.read(self._endpoint.wMaxPacketSize)
@@ -83,6 +84,9 @@ class Reader(object):
                         raise ReadException('Got %s bytes instead of %s - %s' % (len(data), self.data_size, str(data)))
                     else:
                         break
+
+        if data_read:
+            print('Tag read succesfully...') 
 
         if self.debug:
             print('Raw data', data)
